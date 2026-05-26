@@ -1,11 +1,20 @@
 "use client";
 
-import { useUserStore } from "@/store/userStore";
-import { UserCard } from "@/components/cards/UserCard";
-import { AddUserModal } from "@/components/forms/AddUserModal";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { Search, Filter, Plus, ChevronDown, Check } from "lucide-react";
 import { useState } from "react";
+
+import { Plus } from "lucide-react";
+
+import { useUserStore } from "@/store/userStore";
+
+import { UserCard } from "@/components/cards/UserCard";
+
+import { AddUserModal } from "@/components/forms/AddUserModal";
+
+import { EmptyState } from "@/components/shared/EmptyState";
+
+import { SelectDropdown } from "@/components/shared/SelectDropdown";
+import { SearchInput } from "@/components/shared/ShareInput";
+
 
 export function UserManagementPage() {
   const [statusOpen, setStatusOpen] =
@@ -21,25 +30,42 @@ export function UserManagementPage() {
     isAddModalOpen,
   } = useUserStore();
 
-  const allUsers = useUserStore((s) => s.users);
+  const allUsers = useUserStore(
+    (s) => s.users
+  );
 
   // Filter Logic
-  const filtered = allUsers.filter((user) => {
-    const search = filters.search.toLowerCase();
+  const filtered = allUsers.filter(
+    (user) => {
+      const search =
+        filters.search.toLowerCase();
 
-    const matchesSearch =
-      user.name.toLowerCase().includes(search) ||
-      user.email.toLowerCase().includes(search) ||
-      user.phone.toLowerCase().includes(search);
+      const matchesSearch =
+        user.name
+          .toLowerCase()
+          .includes(search) ||
+        user.email
+          .toLowerCase()
+          .includes(search) ||
+        user.phone
+          .toLowerCase()
+          .includes(search);
 
-    const matchesStatus =
-      !filters.status || user.status === filters.status;
+      const matchesStatus =
+        !filters.status ||
+        user.status === filters.status;
 
-    const matchesRole =
-      !filters.role || user.role === filters.role;
+      const matchesRole =
+        !filters.role ||
+        user.role === filters.role;
 
-    return matchesSearch && matchesStatus && matchesRole;
-  });
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesRole
+      );
+    }
+  );
 
   // Stats
   const totalUsers = allUsers.length;
@@ -48,14 +74,17 @@ export function UserManagementPage() {
     (u) => u.type === "Prime User"
   ).length;
 
-  const nonPrimeUsers = allUsers.filter(
-    (u) => u.type !== "Prime User"
-  ).length;
+  const nonPrimeUsers =
+    allUsers.filter(
+      (u) => u.type !== "Prime User"
+    ).length;
 
-  const totalFamily = allUsers.reduce(
-    (sum, u) => sum + u.totalFamilyMembers,
-    0
-  );
+  const totalFamily =
+    allUsers.reduce(
+      (sum, u) =>
+        sum + u.totalFamilyMembers,
+      0
+    );
 
   return (
     <div>
@@ -67,7 +96,8 @@ export function UserManagementPage() {
           </h1>
 
           <p className="mt-0.5 text-sm text-gray-500">
-            Manage user accounts and permissions
+            Manage user accounts and
+            permissions
           </p>
         </div>
 
@@ -96,7 +126,8 @@ export function UserManagementPage() {
             value: nonPrimeUsers,
           },
           {
-            label: "Total Family Members",
+            label:
+              "Total Family Members",
             value: totalFamily,
           },
         ].map((s) => (
@@ -118,140 +149,64 @@ export function UserManagementPage() {
       {/* Filters */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         {/* Search */}
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <SearchInput
+          value={filters.search}
+          onChange={(value) =>
+            setFilters({
+              search: value,
+            })
+          }
+          placeholder="Search by name, email, or phone..."
+        />
 
-          <input
-            value={filters.search}
-            onChange={(e) =>
+        {/* Status Filter */}
+        <div className="min-w-40">
+          <SelectDropdown
+            label="All Status"
+            value={filters.status}
+            options={[
+              "All Status",
+              "Active",
+              "Inactive",
+            ]}
+            open={statusOpen}
+            setOpen={setStatusOpen}
+            onSelect={(value) =>
               setFilters({
-                search: e.target.value,
+                status:
+                  value ===
+                  "All Status"
+                    ? ""
+                    : (value as any),
               })
             }
-            placeholder="Search by name, email, or phone..."
-            className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm outline-none focus:border-green-500"
           />
         </div>
 
-        {/* Status Filter */}
-        {/* Status Filter */}
-<div className="relative w-[184px]">
-  <button
-    type="button"
-    onClick={() =>
-      setStatusOpen(!statusOpen)
-    }
-    className="flex h-9 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700"
-  >
-    <span>
-      {filters.status || "All Status"}
-    </span>
-
-    <ChevronDown className="h-4 w-4 text-gray-400" />
-  </button>
-
-  {statusOpen && (
-    <div className="absolute top-11 z-50 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-      {[
-        "All Status",
-        "Active",
-        "Inactive",
-      ].map((status) => {
-        const active =
-          (filters.status ||
-            "All Status") === status;
-
-        return (
-          <button
-            key={status}
-            type="button"
-            onClick={() => {
-              setFilters({
-                status:
-                  status === "All Status"
-                    ? ""
-                    : (status as any),
-              });
-
-              setStatusOpen(false);
-            }}
-            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-              active
-                ? "bg-gray-100 text-black"
-                : "text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            {status}
-
-            {active && (
-              <Check className="h-4 w-4" />
-            )}
-          </button>
-        );
-      })}
-    </div>
-  )}
-</div>
-
-{/* Role Filter */}
-<div className="relative w-[184px]">
-  <button
-    type="button"
-    onClick={() =>
-      setRoleOpen(!roleOpen)
-    }
-    className="flex h-9 w-full items-center justify-between rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700"
-  >
-    <span>
-      {filters.role || "All Roles"}
-    </span>
-
-    <ChevronDown className="h-4 w-4 text-gray-400" />
-  </button>
-
-  {roleOpen && (
-    <div className="absolute top-11 z-50 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-      {[
-        "All Roles",
-        "Patient",
-        "Nurse",
-        "Doctor",
-      ].map((role) => {
-        const active =
-          (filters.role || "All Roles") ===
-          role;
-
-        return (
-          <button
-            key={role}
-            type="button"
-            onClick={() => {
+        {/* Role Filter */}
+        <div className="min-w-40">
+          <SelectDropdown
+            label="All Roles"
+            value={filters.role}
+            options={[
+              "All Roles",
+              "Patient",
+              "Nurse",
+              "Doctor",
+            ]}
+            open={roleOpen}
+            setOpen={setRoleOpen}
+            onSelect={(value) =>
               setFilters({
                 role:
-                  role === "All Roles"
+                  value ===
+                  "All Roles"
                     ? ""
-                    : role,
-              });
-
-              setRoleOpen(false);
-            }}
-            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-              active
-                ? "bg-gray-100 text-black"
-                : "text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            {role}
-
-            {active && (
-              <Check className="h-4 w-4" />
-            )}
-          </button>
-        );
-      })}
-    </div>
-  )}
-</div>
+                    : value,
+              })
+            }
+          />
+        </div>
       </div>
 
       {/* User List */}
@@ -272,7 +227,9 @@ export function UserManagementPage() {
       )}
 
       {/* Modal */}
-      {isAddModalOpen && <AddUserModal />}
+      {isAddModalOpen && (
+        <AddUserModal />
+      )}
     </div>
   );
 }

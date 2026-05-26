@@ -17,7 +17,7 @@ export function UserAvatar({ name, size = "md", className }: UserAvatarProps) {
   return (
     <div
       className={cn(
-        "rounded-full flex items-center justify-center font-semibold text-white flex-shrink-0",
+        "rounded-full flex items-center justify-center font-semibold text-white shrink-0",
         getAvatarColor(name),
         sizeStyles[size],
         className
