@@ -1,11 +1,5 @@
-import React from 'react'
+import { UserManagementPage } from "@/features/users/UserManagementPage";
 
-const page = () => {
-  return (
-    <div>
-      hello
-    </div>
-  )
+export default function UsersPage() {
+  return <UserManagementPage />;
 }
-
-export default page
