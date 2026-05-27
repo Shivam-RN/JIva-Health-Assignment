@@ -13,7 +13,7 @@ export const addUserSchema = z.object({
   pinCode: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
-  country: z.string().default("India"),
+  country: z.string().min(1, "Country is required").default("India")
 });
 
 export type AddUserFormValues = z.infer<typeof addUserSchema>;

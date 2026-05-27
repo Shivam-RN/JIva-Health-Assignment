@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import {
@@ -26,9 +26,7 @@ export function AddUserModal() {
     setValue,
     formState: { errors },
   } = useForm<AddUserFormValues>({
-    resolver: zodResolver(
-      addUserSchema
-    ),
+    resolver: zodResolver(addUserSchema) as Resolver<AddUserFormValues>,
     defaultValues: {
       country: "India",
     },
