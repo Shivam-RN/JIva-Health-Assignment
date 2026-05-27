@@ -18,7 +18,8 @@ type BadgeVariant =
   | "son" | "daughter" | "spouse" | "father" | "mother" | "sibling" | "other"
   | "home" | "work"
   | "default"
-  | "gray";
+  | "gray"
+  | "blood";
 
 const variantStyles: Record<BadgeVariant, string> = {
   active: "bg-green-100 text-green-700",
@@ -45,6 +46,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   work: "bg-blue-50 text-blue-700",
   default: "bg-green-100 text-green-700",
   gray: "bg-gray-100 text-gray-600",
+  blood: "bg-red-50 text-red-700",
 };
 
 interface StatusBadgeProps {

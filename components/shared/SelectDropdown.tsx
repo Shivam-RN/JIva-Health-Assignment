@@ -30,7 +30,7 @@ export function SelectDropdown({
         onClick={() =>
           setOpen(!open)
         }
-        className="flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700"
+        className="flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700"
       >
         <span
           className={
@@ -62,8 +62,8 @@ export function SelectDropdown({
                 }}
                 className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                   active
-                    ? "bg-gray-100 text-black"
-                    : "text-gray-700 hover:bg-gray-50"
+                    ? "bg-gray-200 text-black"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {option}

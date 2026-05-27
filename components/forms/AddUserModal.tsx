@@ -3,38 +3,22 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-  X,
-  ChevronDown,
-  Check,
-} from "lucide-react";
-
+import { X } from "lucide-react";
 import {
   addUserSchema,
   AddUserFormValues,
 } from "@/lib/schemas";
-
 import { useUserStore } from "@/store/userStore";
 import { useToast } from "@/components/ui/toaster";
-
 import { User } from "@/types";
+import { SelectDropdown } from "@/components/shared/SelectDropdown";
 
 export function AddUserModal() {
-  const { closeAddModal, addUser } =
-    useUserStore();
-
+  const { closeAddModal, addUser } = useUserStore();
   const { toast } = useToast();
-
-  const [genderOpen, setGenderOpen] =
-    useState(false);
-
-  const [bloodOpen, setBloodOpen] =
-    useState(false);
-
-  const [stateOpen, setStateOpen] =
-    useState(false);
-
+  const [genderOpen, setGenderOpen] = useState(false);
+  const [bloodOpen, setBloodOpen] = useState(false);
+  const [stateOpen, setStateOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -42,8 +26,9 @@ export function AddUserModal() {
     setValue,
     formState: { errors },
   } = useForm<AddUserFormValues>({
-    resolver: zodResolver(addUserSchema),
-
+    resolver: zodResolver(
+      addUserSchema
+    ),
     defaultValues: {
       country: "India",
     },
@@ -54,76 +39,41 @@ export function AddUserModal() {
   ) => {
     const newUser: User = {
       id: crypto.randomUUID(),
-
       name: data.name,
-
       email: data.email,
-
       phone:
         data.phone ||
         "+91 00000 00000",
-
       role: "Patient",
-
       status: "Active",
-
       type: "Normal User",
-
       dob: data.dob || "",
-
-      gender:
-        data.gender || "Male",
-
-      bloodGroup:
-        data.bloodGroup || "O+",
-
-      joinedDate: new Date()
-        .toISOString()
-        .split("T")[0],
-
-      lastActive: new Date()
-        .toISOString()
-        .split("T")[0],
-
+      gender: data.gender || "Male",
+      bloodGroup: data.bloodGroup || "O+",
+      joinedDate: new Date().toISOString().split("T")[0],
+      lastActive: new Date().toISOString().split("T")[0],
       appointmentCount: 0,
-
       totalOrders: 0,
-
       totalBookings: 0,
-
       totalFamilyMembers: 0,
-
       totalSpent: 0,
-
       addresses: data.city
         ? [
             {
               id: crypto.randomUUID(),
-
               type: "Home",
-
               isDefault: true,
-
-              street:
-                data.areaDetail || "",
-
+              street: data.areaDetail || "",
               city: data.city || "",
-
               state: data.state || "",
-
-              pinCode:
-                data.pinCode || "",
-
+              pinCode: data.pinCode || "",
               country: data.country,
             },
           ]
         : [],
     };
-
     addUser(newUser);
-
     closeAddModal();
-
     toast(
       `User ${data.name} added successfully!`
     );
@@ -237,82 +187,28 @@ export function AddUserModal() {
                 Gender
               </label>
 
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setGenderOpen(
-                      !genderOpen
-                    )
-                  }
-                  className="flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700"
-                >
-                  <span
-                    className={
-                      watch("gender")
-                        ? "text-gray-700"
-                        : "text-gray-400"
-                    }
-                  >
-                    {watch(
-                      "gender"
-                    ) ||
-                      "Select gender"}
-                  </span>
-
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
-                </button>
-
-                {genderOpen && (
-                  <div className="absolute top-11 z-50 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-                    {[
-                      "Male",
-                      "Female",
-                      "Other",
-                    ].map(
-                      (gender) => {
-                        const active =
-                          watch(
-                            "gender"
-                          ) ===
-                          gender;
-
-                        return (
-                          <button
-                            key={
-                              gender
-                            }
-                            type="button"
-                            onClick={() => {
-                              setValue(
-                                "gender",
-                                gender as any
-                              );
-
-                              setGenderOpen(
-                                false
-                              );
-                            }}
-                            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                              active
-                                ? "bg-gray-100 text-black"
-                                : "text-gray-700 hover:bg-gray-50"
-                            }`}
-                          >
-                            {
-                              gender
-                            }
-
-                            {active && (
-                              <Check className="h-4 w-4" />
-                            )}
-                          </button>
-                        );
-                      }
-                    )}
-                  </div>
-                )}
-              </div>
+              <SelectDropdown
+                label="Select gender"
+                value={
+                  watch("gender") ||
+                  ""
+                }
+                options={[
+                  "Male",
+                  "Female",
+                  "Other",
+                ]}
+                open={genderOpen}
+                setOpen={
+                  setGenderOpen
+                }
+                onSelect={(value) =>
+                  setValue(
+                    "gender",
+                    value as any
+                  )
+                }
+              />
             </div>
 
             {/* Blood Group */}
@@ -321,89 +217,32 @@ export function AddUserModal() {
                 Blood Group
               </label>
 
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setBloodOpen(
-                      !bloodOpen
-                    )
-                  }
-                  className="flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700"
-                >
-                  <span
-                    className={
-                      watch(
-                        "bloodGroup"
-                      )
-                        ? "text-gray-700"
-                        : "text-gray-400"
-                    }
-                  >
-                    {watch(
-                      "bloodGroup"
-                    ) ||
-                      "Select blood group"}
-                  </span>
-
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
-                </button>
-
-                {bloodOpen && (
-                  <div className="absolute top-11 z-50 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-                    {[
-                      "A+",
-                      "A-",
-                      "B+",
-                      "B-",
-                      "AB+",
-                      "AB-",
-                      "O+",
-                      "O-",
-                    ].map(
-                      (group) => {
-                        const active =
-                          watch(
-                            "bloodGroup"
-                          ) ===
-                          group;
-
-                        return (
-                          <button
-                            key={
-                              group
-                            }
-                            type="button"
-                            onClick={() => {
-                              setValue(
-                                "bloodGroup",
-                                group as any
-                              );
-
-                              setBloodOpen(
-                                false
-                              );
-                            }}
-                            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                              active
-                                ? "bg-gray-100 text-black"
-                                : "text-gray-700 hover:bg-gray-50"
-                            }`}
-                          >
-                            {
-                              group
-                            }
-
-                            {active && (
-                              <Check className="h-4 w-4" />
-                            )}
-                          </button>
-                        );
-                      }
-                    )}
-                  </div>
-                )}
-              </div>
+              <SelectDropdown
+                label="Select blood group"
+                value={
+                  watch(
+                    "bloodGroup"
+                  ) || ""
+                }
+                options={[
+                  "A+",
+                  "A-",
+                  "B+",
+                  "B-",
+                  "AB+",
+                  "AB-",
+                  "O+",
+                  "O-",
+                ]}
+                open={bloodOpen}
+                setOpen={setBloodOpen}
+                onSelect={(value) =>
+                  setValue(
+                    "bloodGroup",
+                    value as any
+                  )
+                }
+              />
             </div>
 
             {/* Area Detail */}
@@ -455,88 +294,31 @@ export function AddUserModal() {
                 State
               </label>
 
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setStateOpen(
-                      !stateOpen
-                    )
-                  }
-                  className="flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700"
-                >
-                  <span
-                    className={
-                      watch("state")
-                        ? "text-gray-700"
-                        : "text-gray-400"
-                    }
-                  >
-                    {watch(
-                      "state"
-                    ) ||
-                      "Select state"}
-                  </span>
-
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
-                </button>
-
-                {stateOpen && (
-                  <div className="absolute top-11 z-50 w-full rounded-xl border border-gray-100 bg-white p-2 shadow-lg">
-                    {[
-                      "Maharashtra",
-                      "Delhi",
-                      "Karnataka",
-                      "Tamil Nadu",
-                      "Gujarat",
-                      "Rajasthan",
-                      "West Bengal",
-                      "Telangana",
-                      "Kerala",
-                    ].map(
-                      (state) => {
-                        const active =
-                          watch(
-                            "state"
-                          ) ===
-                          state;
-
-                        return (
-                          <button
-                            key={
-                              state
-                            }
-                            type="button"
-                            onClick={() => {
-                              setValue(
-                                "state",
-                                state
-                              );
-
-                              setStateOpen(
-                                false
-                              );
-                            }}
-                            className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                              active
-                                ? "bg-gray-100 text-black"
-                                : "text-gray-700 hover:bg-gray-50"
-                            }`}
-                          >
-                            {
-                              state
-                            }
-
-                            {active && (
-                              <Check className="h-4 w-4" />
-                            )}
-                          </button>
-                        );
-                      }
-                    )}
-                  </div>
-                )}
-              </div>
+              <SelectDropdown
+                label="Select state"
+                value={
+                  watch("state") || ""
+                }
+                options={[
+                  "Maharashtra",
+                  "Delhi",
+                  "Karnataka",
+                  "Tamil Nadu",
+                  "Gujarat",
+                  "Rajasthan",
+                  "West Bengal",
+                  "Telangana",
+                  "Kerala",
+                ]}
+                open={stateOpen}
+                setOpen={setStateOpen}
+                onSelect={(value) =>
+                  setValue(
+                    "state",
+                    value
+                  )
+                }
+              />
             </div>
 
             {/* Country */}
