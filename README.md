@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jiva Health — User Management Dashboard
+
+A User Management Dashboard for a digital health platform built as part of the Jiva Health frontend assignment.
+
+---
+
+## Tech Stack
+
+- **Next.js 16** (App Router) + **TypeScript**
+- **Tailwind CSS**
+- **Zustand** — state management
+- **React Hook Form** + **Zod** — forms & validation
+- **Lucide React** — icons
+
+---
 
 ## Getting Started
 
-First, run the development server:
+**Prerequisites:** Node.js v18+
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/Shivam-RN/JIva-Health-Assignment.git
+
+# 2. Install dependencies
+npm install
+
+# 3. Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — auto redirects to `/users`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production build |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Folder Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+jiva-health/
+├── app/
+│   ├── users/
+│   │   ├── page.tsx                 
+│   │   ├── layout.tsx                
+│   │   └── [id]/
+│   │       ├── page.tsx              
+│   │       └── orders/[orderId]/
+│   │           └── page.tsx         
+│   ├── layout.tsx
+│   ├── page.tsx                     
+│   └── globals.css
+│
+├── components/
+│   ├── layout/
+│   │   ├── Sidebar.tsx
+│   │   └── Topbar.tsx
+│   ├── shared/
+│   │   ├── UserAvatar.tsx
+│   │   ├── StatusBadge.tsx
+│   │   ├── ConfirmDialog.tsx
+│   │   ├── EmptyState.tsx
+│   │   ├── LoadingSkeleton.tsx
+│   │   ├── SelectDropdown.tsx        
+│   │   └── SharedInput.tsx           
+│   ├── cards/
+│   │   └── UserCard.tsx
+│   ├── forms/
+│   │   ├── AddUserModal.tsx
+│   │   ├── EditPersonalInfoModal.tsx
+│   │   ├── AddressModal.tsx
+│   │   └── AddFamilyMemberModal.tsx
+│   └── ui/
+│       └── toaster.tsx
+│
+├── features/
+│   ├── users/
+│   │   ├── UserManagementPage.tsx
+│   │   ├── UserDetailPage.tsx
+│   │   └── tabs/
+│   │       ├── OverviewTab.tsx
+│   │       ├── OrdersTab.tsx
+│   │       ├── PaymentsTab.tsx
+│   │       └── FamilyMembersTab.tsx
+│   └── orders/
+│       └── OrderDetailPage.tsx
+│
+├── store/
+│   ├── userStore.ts
+│   ├── orderStore.ts
+│   ├── paymentStore.ts
+│   └── familyStore.ts
+│
+├── data/
+│   ├── users.ts
+│   ├── orders.ts
+│   ├── payments.ts
+│   └── familyMembers.ts
+│
+├── types/index.ts
+└── lib/
+    ├── utils.ts
+    └── schemas.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **User List** — stats cards, search by name/email/phone, filter by status & role, add user, upgrade to prime
+- **User Detail** — avatar, metrics (orders, bookings, family, spent), status toggle, upgrade to prime
+- **Overview Tab** — personal info (editable), addresses (add/edit/delete)
+- **Orders Tab** — order list, inline status update, delete, view detail
+- **Payments Tab** — payment history with transaction ID and method
+- **Family Members Tab** — add/edit/delete members, live count update
+- **Order Detail** — shipping address, payment info, delivery timeline, itemised medicine list
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Author
+
+**Shivam Rana** — Frontend Developer  
+[GitHub](https://github.com/Shivam-RN) · [LinkedIn](https://www.linkedin.com/in/shivamrana1809)
