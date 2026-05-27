@@ -14,7 +14,7 @@ const schema = z.object({
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
   pinCode: z.string().min(1, "Pin code is required"),
-  country: z.string().default("India"),
+  country: z.string().min(1, "Country is required"),
 });
 
 type FormValues = z.infer<typeof schema>;
