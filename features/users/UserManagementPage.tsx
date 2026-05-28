@@ -1,28 +1,17 @@
 "use client";
 
 import { useState } from "react";
-
 import { Plus } from "lucide-react";
-
 import { useUserStore } from "@/store/userStore";
-
 import { UserCard } from "@/components/cards/UserCard";
-
 import { AddUserModal } from "@/components/forms/AddUserModal";
-
 import { EmptyState } from "@/components/shared/EmptyState";
-
 import { SelectDropdown } from "@/components/shared/SelectDropdown";
 import { SearchInput } from "@/components/shared/ShareInput";
 
-
 export function UserManagementPage() {
-  const [statusOpen, setStatusOpen] =
-    useState(false);
-
-  const [roleOpen, setRoleOpen] =
-    useState(false);
-
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [roleOpen, setRoleOpen] = useState(false);
   const {
     filters,
     setFilters,
@@ -85,6 +74,7 @@ export function UserManagementPage() {
         sum + u.totalFamilyMembers,
       0
     );
+    
 
   return (
     <div>

@@ -26,6 +26,7 @@ interface UserStore {
 
   deleteUser: (id: string) => void;
 
+  upgradeUserToPrime: (id: string) => void;
   setFilters: (
     filters: Partial<UserFilters>
   ) => void;
@@ -87,6 +88,18 @@ export const useUserStore =
           (user) => user.id !== id
         ),
       })),
+
+    upgradeUserToPrime: (id: string) =>
+  set((state) => ({
+    users: state.users.map((user) =>
+      user.id === id
+        ? {
+            ...user,
+            type: "Prime User",
+          }
+        : user
+    ),
+  })),
 
     // Filters
     setFilters: (filters) =>

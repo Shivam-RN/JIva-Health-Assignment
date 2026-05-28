@@ -1,14 +1,31 @@
 "use client";
 
-import { Search, Moon, Bell, PanelLeftClose } from "lucide-react";
+import {
+  Search,
+  Moon,
+  Bell,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react";
+interface TopbarProps {
+  sidebarOpen: boolean;
 
-export function Topbar() {
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export function Topbar({ sidebarOpen, setSidebarOpen }: TopbarProps) {
   return (
     <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 md:px-6">
       {/* Left Section */}
       <div className="flex items-center gap-2">
-        <button className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100">
-          <PanelLeftClose className="h-5 w-5" />
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-black transition-colors hover:bg-gray-100"
+        >
+          {sidebarOpen ? (
+            <PanelLeftClose className="h-5 w-5" />
+          ) : (
+            <PanelLeftOpen className="h-5 w-5" />
+          )}
         </button>
       </div>
 
@@ -40,10 +57,10 @@ export function Topbar() {
         </button>
 
         <div className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200">
-  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#016A4D] text-[10px] font-semibold text-white">
-    AD
-  </div>
-</div>
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#016A4D] text-[10px] font-semibold text-white">
+            AD
+          </div>
+        </div>
       </div>
     </header>
   );

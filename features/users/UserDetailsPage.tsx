@@ -49,6 +49,8 @@ export function UserDetailPage({ userId }: Props) {
   const { getMembersByUserId } = useFamilyStore();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const { upgradeUserToPrime } = useUserStore();
+
 
   const user = users.find((u) => u.id.toString() === userId);
   if (!user) {
@@ -73,6 +75,14 @@ export function UserDetailPage({ userId }: Props) {
     });
 
     toast(`Status updated to ${value}`);
+  };
+
+  const handleUpgrade = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    upgradeUserToPrime(user.id);
+
+    toast(`${user.name} upgraded to Prime!`);
   };
 
   const roleVariant =
@@ -163,10 +173,12 @@ export function UserDetailPage({ userId }: Props) {
             </div>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <button className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+             {user.type !== "Prime User" && (
+            <button onClick={handleUpgrade} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
               <Crown className="w-4 h-4" />
               Upgrade to Prime
             </button>
+            )}
             <div className="min-w-40">
               <SelectDropdown
                 label="Select Status"
